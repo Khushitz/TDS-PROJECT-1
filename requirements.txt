@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+aiohttp
+beautifulsoup4
+html2text
+python-dotenv
+tqdm
+markdown
+playwright
+markdownify
