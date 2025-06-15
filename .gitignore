@@ -9,3 +9,5 @@ venv/
 .env
 *.pyc
 .DS_Store
+.vercel
+project-tds-virtual-ta-promptfoo.yaml

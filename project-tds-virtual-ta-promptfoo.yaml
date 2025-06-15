@@ -25,7 +25,7 @@ defaultTest:
         method: POST
         headers:
           Content-Type: application/json
-          Authorization: eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjIyZjIwMDAzNjRAZHMuc3R1ZHkuaWl0bS5hYy5pbiJ9.efByG3mEpvO2oO7FvSf0orZX2VmmI10Xc0DJIMzRDkI
+          Authorization: eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjIzZjEwMDAzOTFAZHMuc3R1ZHkuaWl0bS5hYy5pbiJ9.DLOxFiVh-quc4-I2jM6n_LtPsYswkrZCwUzn3bXI87A
         body: |
           {
             "model": "gpt-4o-mini",

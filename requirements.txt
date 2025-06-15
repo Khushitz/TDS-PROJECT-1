@@ -8,3 +8,4 @@ tqdm
 markdown
 playwright
 markdownify
+numpy
