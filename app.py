@@ -27,7 +27,7 @@ SIMILARITY_THRESHOLD = 0.10  # Lowered threshold for better recall
 MAX_RESULTS = 10  # Increased to get more context
 load_dotenv()
 MAX_CONTEXT_CHUNKS = 4  # Increased number of chunks per source
-API_KEY = os.getenv("API_KEY")  # Get API key from environment variable
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # Get API key from environment variable
 
 # Models
 class QueryRequest(BaseModel):
@@ -55,7 +55,7 @@ app.add_middleware(
 )
 
 # Verify API key is set
-if not API_KEY:
+if not OPENAI_API_KEY:
     logger.error("API_KEY environment variable is not set. The application will not function correctly.")
 
 # Create a connection to the SQLite database
@@ -136,7 +136,7 @@ def cosine_similarity(vec1, vec2):
 
 # Function to get embedding from aipipe proxy with retry mechanism
 async def get_embedding(text, max_retries=3):
-    if not API_KEY:
+    if not OPENAI_API_KEY:
         error_msg = "API_KEY environment variable not set"
         logger.error(error_msg)
         raise HTTPException(status_code=500, detail=error_msg)
@@ -148,7 +148,7 @@ async def get_embedding(text, max_retries=3):
             # Call the embedding API through aipipe proxy
             url = "https://aipipe.org/openai/v1/embeddings"
             headers = {
-                "Authorization": API_KEY,
+                "Authorization": OPENAI_API_KEY,
                 "Content-Type": "application/json"
             }
             payload = {
@@ -389,7 +389,7 @@ async def enrich_with_adjacent_chunks(conn, results):
 
 # Function to generate an answer using LLM with improved prompt
 async def generate_answer(question, relevant_results, max_retries=2):
-    if not API_KEY:
+    if not OPENAI_API_KEY:
         error_msg = "API_KEY environment variable not set"
         logger.error(error_msg)
         raise HTTPException(status_code=500, detail=error_msg)
@@ -428,7 +428,7 @@ async def generate_answer(question, relevant_results, max_retries=2):
             # Call OpenAI API through aipipe proxy
             url = "https://aipipe.org/openai/v1/chat/completions"
             headers = {
-                "Authorization": API_KEY,
+                "Authorization": OPENAI_API_KEY,
                 "Content-Type": "application/json"
             }
             payload = {
@@ -467,7 +467,7 @@ async def generate_answer(question, relevant_results, max_retries=2):
 
 # Function to process multimodal content (text + image)
 async def process_multimodal_query(question, image_base64):
-    if not API_KEY:
+    if not OPENAI_API_KEY:
         error_msg = "API_KEY environment variable not set"
         logger.error(error_msg)
         raise HTTPException(status_code=500, detail=error_msg)
@@ -482,7 +482,7 @@ async def process_multimodal_query(question, image_base64):
         # Call the GPT-4o Vision API to process the image and question
         url = "https://aipipe.org/openai/v1/chat/completions"
         headers = {
-            "Authorization": API_KEY,
+            "Authorization": OPENAI_API_KEY,
             "Content-Type": "application/json"
         }
         
@@ -602,7 +602,7 @@ async def query_knowledge_base(request: QueryRequest):
         # Log the incoming request
         logger.info(f"Received query request: question='{request.question[:50]}...', image_provided={request.image is not None}")
         
-        if not API_KEY:
+        if not OPENAI_API_KEY:
             error_msg = "API_KEY environment variable not set"
             logger.error(error_msg)
             return JSONResponse(
@@ -711,7 +711,7 @@ async def health_check():
         return {
             "status": "healthy", 
             "database": "connected", 
-            "api_key_set": bool(API_KEY),
+            "api_key_set": bool(OPENAI_API_KEY),
             "discourse_chunks": discourse_count,
             "markdown_chunks": markdown_count,
             "discourse_embeddings": discourse_embeddings,
@@ -721,7 +721,7 @@ async def health_check():
         logger.error(f"Health check failed: {e}")
         return JSONResponse(
             status_code=500,
-            content={"status": "unhealthy", "error": str(e), "api_key_set": bool(API_KEY)}
+            content={"status": "unhealthy", "error": str(e), "api_key_set": bool(OPENAI_API_KEY)}
         )
 
 if __name__ == "__main__":
